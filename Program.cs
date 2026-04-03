@@ -12,7 +12,7 @@ SystemExtra.Util.SystemService = true;
 // load settings from appsettings.json
 PayPalBusinessEmail = configuration.GetValue(typeof(string), nameof(PayPalBusinessEmail), null) as string;
 ApiEndpoint = configuration.GetValue(typeof(string), nameof(ApiEndpoint) , null) as string;
-
+ApiPrivateKey = configuration.GetValue(typeof(string), nameof(ApiPrivateKey), null) as string;
 // Add services to the container.
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 

@@ -2,6 +2,7 @@
 using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Text.Json;
+using UISupportGeneric;
 
 namespace CloudSubscription
 {
@@ -34,11 +35,27 @@ namespace CloudSubscription
                 attempts++;
                 try
                 {
+                    bool signRequest = !String.IsNullOrEmpty( Settings.ApiPrivateKey);
                     using var client = new HttpClient();
-                    var content = new StringContent(subscription.JsonString, Encoding.UTF8, "application/json");
+                    string jsonString;
+                    if (signRequest)
+                    {
+                        var subscriptionData = JsonSerializer.Deserialize<Dictionary<string, object>>(subscription.JsonString);
+                        subscriptionData["timestamp"] = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                        jsonString = JsonSerializer.Serialize(subscriptionData);
+                        using var rsa = System.Security.Cryptography.RSA.Create();
+                        rsa.ImportFromPem(Settings.ApiPrivateKey);
+                        var signature = rsa.SignData(Encoding.UTF8.GetBytes(jsonString), System.Security.Cryptography.HashAlgorithmName.SHA256, System.Security.Cryptography.RSASignaturePadding.Pkcs1);
+                        client.DefaultRequestHeaders.Add("X-Signature", Convert.ToBase64String(signature));
+                    }
+                    else
+                    {
+                        jsonString = subscription.JsonString;
+                    }
+                    var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
                     var response = client.PostAsync(Settings.ApiEndpoint, content).Result; // Send POST request
                     string responseContent = response.Content.ReadAsStringAsync().Result;
-
+                    
                     // Parse the JSON response and extract the "result" field
                     var jsonDocument = JsonDocument.Parse(responseContent);
                     if (jsonDocument.RootElement.TryGetProperty("CloudId", out var resultElementCloudId) && jsonDocument.RootElement.TryGetProperty("QrEncrypted", out var resultElementQrEncrypted))
