@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/Andrea-Bruno/CloudSubscription</RepositoryUrl>
+    <RepositoryUrl>https://github.com/Graphene-Lab/CloudSubscription</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
