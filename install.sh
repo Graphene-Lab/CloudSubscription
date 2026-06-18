@@ -20,7 +20,7 @@ if [ "$PWD" != "$INSTALL_PATH" ]; then
 fi
 
 # DOTNET runtime
-# NOTE: You can download the runtime from here: https://dotnet.microsoft.com/en-us/download/dotnet/9.0
+# NOTE: You can download the runtime from here: https://dotnet.microsoft.com/en-us/download/dotnet/10.0
 #       and unzip the *.tga.gz file in home/$YourUser/.dotnet (or in a different position)
 
 # Download the installer:
@@ -39,7 +39,7 @@ chmod 755 $DOTNET_PATH
 
 chmod +x ./dotnet-install.sh
 # info https://learn.microsoft.com/it-it/dotnet/core/tools/dotnet-install-script
-./dotnet-install.sh --channel 9.0 --runtime aspnetcore --install-dir $DOTNET_PATH
+./dotnet-install.sh --channel 10.0 --runtime aspnetcore --install-dir $DOTNET_PATH
 
 #start the application
 $DOTNET_PATH/dotnet CloudSubscription.dll
